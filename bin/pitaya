@@ -2,10 +2,11 @@
 
 'use strict'
 
+let logging  = require('../lib/logging')
 let pitayadb = require('../lib/pitayadb').PitayaDB
 let os       = require('os')
 let argv     = require('optimist').argv
-var colors   = require('colors')
+
 
 if (argv.h) {
     console.log([
@@ -15,7 +16,7 @@ if (argv.h) {
         '  -a    Address to use [0.0.0.0]',
         '  -p    HTTP port to use [6504]',
         '  -d    Data path [/data/pitaya]',
-	'  -s    Silent mode (suppress log messages from output)',
+        '  -s    Silent mode (suppress log messages from output)',
         '  -h    Print this help and exit'
     ].join('\n'))
     process.exit()
@@ -28,27 +29,10 @@ let port = argv.p || 6504,
     db
 
 if (!argv.s) {
-    logger = {
-        log: console.log,
-	error: function (msg) {
-            let now = new Date().toUTCString()
-            logger.log('[%s] ERROR : %s', now, msg.red)
-        },
-        warn: function (msg) {
-            let now = new Date().toUTCString()
-            logger.log('[%s] WARN  : %s', now, msg.yellow)
-        },
-	info: function (msg) {
-	    let now = new Date().toUTCString()
-	    logger.log('[%s] INFO  : %s', now, msg.cyan)
-        }
-    }
+    logger = new logging.ColoredLogger()
 }
 else {
-    logger = {
-        error: function () {},
-        info: function () {}
-    }
+    logger = new logging.SilentLogger()
 }
 
 process.on('SIGINT', () => {

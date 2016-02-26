@@ -1,15 +1,18 @@
 'use strict'
 
-let MyNoSqlDB = require('./lib/mynosqldb').MyNoSqlDB
+let ColoredLogger = require('../lib/logging').ColoredLogger
+let PitayaDB = require('../lib/pitayadb').PitayaDB
 
-let mynosql = new MyNoSqlDB('/tmp/db/test')
+let logger = new ColoredLogger()
+let mydb = new PitayaDB('0.0.0.0', 6504, '/tmp/db/test', logger)
 
-mynosql.init()
-    .then( () => mynosql.deleteDatabase('test'))
-    .then( () => mynosql.createDatabase('test'))
+mydb.init()
+    .then( () => mydb.deleteDatabase('test'))
+    .catch( err => logger.error('Delete db: ' + err))
+    .then( () => mydb.createDatabase('test'))
     .then( db => {
-        console.info('Database created: ' + db.name)
+        logger.info('Database created: ' + db.name)
         return db.collection('test').insert({hello:'world'})
     })
-    .then( docId => console.info('Doc inserted: ' + docId))
-    .catch( err => console.error('Something wrong happened: ' + err))
+    .then( docId => logger.info('Doc inserted: ' + docId))
+    .catch( err => logger.error('Something wrong happened: ' + err))
