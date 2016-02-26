@@ -1,0 +1,43 @@
+{
+    "name" :            "pitayaDB",
+    "description" :     "A simple database for node.js and the browser",
+    "keywords" :        [ "nosql", "database", "nodejs" ],
+    "version" :         "0.0.1",
+    "author" :          "pitayaDB <pitayadb@gmail.com>",
+    "contributors" :    [ "Bruno Bonnin <bbonnin@gmail.com>" ],
+
+    "repository" :      {
+                          "type" :  "git",
+                          "url" :   "git://github.com/pitayadb/pitayadb.git"
+    },
+    "bugs" :            {
+                           "url" :   "https://github.com/pitayadb/pitayadb/issues"
+    },
+    "dependencies" : {
+        "bson" :           "~0.4.21",
+        "fs-extra" :       "~0.26.5",
+        "fs-promise" :     "~0.4.1",
+        "flake-idgen" :    "~1.0.0",
+        "biguint-format" : "~1.0.0",
+        "hapi" :           "~13.0.0"
+    },
+
+    "devDependencies": {
+    },
+
+    "config":         { "native" : false },
+
+    "main":             "./lib/pitaya",
+
+    "directories" :   { "lib" : "./lib" },
+
+    "engines" :       { "node" : ">=0.6.19" },
+
+    "scripts": {
+    },
+
+    "browser": "lib/pitaya_client.js",
+
+    "license": "MIT"
+}
+
