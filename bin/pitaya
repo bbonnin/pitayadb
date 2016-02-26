@@ -1,0 +1,66 @@
+#!/usr/bin/env node
+
+'use strict'
+
+let pitayadb = require('../lib/pitayadb').PitayaDB
+let os       = require('os')
+let argv     = require('optimist').argv
+var colors   = require('colors')
+
+if (argv.h) {
+    console.log([
+        'usage: pitaya [options]',
+        '',
+        'options:',
+        '  -a    Address to use [0.0.0.0]',
+        '  -p    HTTP port to use [6504]',
+        '  -d    Data path [/data/pitaya]',
+	'  -s    Silent mode (suppress log messages from output)',
+        '  -h    Print this help and exit'
+    ].join('\n'))
+    process.exit()
+}
+
+let port = argv.p || 6504,
+    host = argv.a || '0.0.0.0',
+    data = argv.d || '/data/pitaya',
+    logger,
+    db
+
+if (!argv.s) {
+    logger = {
+        log: console.log,
+	error: function (msg) {
+            let now = new Date().toUTCString()
+            logger.log('[%s] ERROR : %s', now, msg.red)
+        },
+        warn: function (msg) {
+            let now = new Date().toUTCString()
+            logger.log('[%s] WARN  : %s', now, msg.yellow)
+        },
+	info: function (msg) {
+	    let now = new Date().toUTCString()
+	    logger.log('[%s] INFO  : %s', now, msg.cyan)
+        }
+    }
+}
+else {
+    logger = {
+        error: function () {},
+        info: function () {}
+    }
+}
+
+process.on('SIGINT', () => {
+    db.stop()
+    process.exit()
+})
+
+process.on('SIGTERM', () => {
+    db.stop()
+    process.exit()
+})
+
+db = pitayadb.create(host, port, data, logger)
+        .then( (db) => db.start() )
+

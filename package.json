@@ -14,6 +14,8 @@
                            "url" :   "https://github.com/pitayadb/pitayadb/issues"
     },
     "dependencies" : {
+        "optimist" :       "~0.6.1",
+        "colors" :         "~1.1.2",
         "bson" :           "~0.4.21",
         "fs-extra" :       "~0.26.5",
         "fs-promise" :     "~0.4.1",
